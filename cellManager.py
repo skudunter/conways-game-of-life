@@ -15,6 +15,10 @@ class CellManager:
         self.cells[gridY][gridX] = Cell(
             gridX * self.gridSize, gridY * self.gridSize, self.gridSize, self.cellColor)
 
+    def erase_cell(self, x, y):
+        gridX, gridY = x // self.gridSize, y // self.gridSize
+        self.cells[gridY][gridX] = 0
+
     def display_cells(self, screen):
         for i in range(len(self.cells)):
             for j in range(len(self.cells[i])):

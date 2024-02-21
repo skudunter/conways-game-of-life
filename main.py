@@ -1,13 +1,13 @@
 import pygame
 import keyboard
-import time
 from cellManager import CellManager
 
 # Initialize pygame
 pygame.init()
 
 # Define constants
-GRID_SIZE = 40
+GRID_SIZE = 10
+UPDATES_PER_SECOND = 10
 SCREEN_WIDTH = (pygame.display.Info().current_w // GRID_SIZE) * GRID_SIZE
 SCREEN_HEIGHT = ((pygame.display.Info().current_h - 60) //
                  GRID_SIZE) * GRID_SIZE
@@ -20,6 +20,7 @@ running = True
 has_game_started = False
 show_grid = False
 drawing = False
+erasing = False
 
 # Set up screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -34,7 +35,7 @@ cell_manager = CellManager(GRID_SIZE, SCREEN_WIDTH, SCREEN_HEIGHT, CELL_COLOR)
 
 # Define a custom event
 UPDATE_EVENT = pygame.USEREVENT + 1
-pygame.time.set_timer(UPDATE_EVENT, 500)
+pygame.time.set_timer(UPDATE_EVENT, round(1000/UPDATES_PER_SECOND))
 
 
 def draw_grid(grid_size, screen_width, screen_height, grid_color, screen, show_grid):
@@ -58,9 +59,17 @@ while running:
             drawing = True
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             drawing = False
-        elif event.type == pygame.MOUSEMOTION and drawing and not has_game_started:
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3 and not has_game_started:
+            cell_manager.erase_cell(event.pos[0], event.pos[1])
+            erasing = True
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+            erasing = False
+        elif event.type == pygame.MOUSEMOTION and (drawing or erasing) and not has_game_started:
             x, y = pygame.mouse.get_pos()
-            cell_manager.spawn_cell(x, y)
+            if drawing:
+                cell_manager.spawn_cell(x, y)
+            elif erasing:
+                cell_manager.erase_cell(x, y)
         elif event.type == UPDATE_EVENT and has_game_started:
             cell_manager.update()
 
