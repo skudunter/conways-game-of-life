@@ -7,7 +7,7 @@ from cellManager import CellManager
 pygame.init()
 
 # Define constants
-GRID_SIZE = 20
+GRID_SIZE = 40
 SCREEN_WIDTH = (pygame.display.Info().current_w // GRID_SIZE) * GRID_SIZE
 SCREEN_HEIGHT = ((pygame.display.Info().current_h - 60) //
                  GRID_SIZE) * GRID_SIZE

@@ -43,7 +43,7 @@ class CellManager:
                 else:
                     if neighbors == 3:
                         new_cells[i][j] = Cell(
-                            i * self.gridSize, j * self.gridSize, self.gridSize, self.cellColor)
+                            j * self.gridSize, i * self.gridSize, self.gridSize, self.cellColor)
         self.cells = new_cells
 
     def restart(self,):
